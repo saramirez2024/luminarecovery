@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINA — Recovery Serum</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0d0e10;
+  --text: #f0ede8;
+  --gold: #c8a96e;
+  --text-muted: rgba(240, 237, 232, 0.55);
+  --text-dim: rgba(240, 237, 232, 0.35);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Montserrat', Helvetica, Arial, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-glow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(200, 169, 110, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 116px 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.brand {
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.product-name {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 42px;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.active-highlight {
+  color: var(--gold);
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  margin-bottom: 32px;
+}
+
+.divider {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 32px 0;
+  opacity: 0.6;
+}
+
+.divider-full {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 40px 0;
+  opacity: 0.3;
+}
+
+/* Sections */
+.section-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.section-subtitle {
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+p, li {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(240, 237, 232, 0.85);
+}
+
+/* Ingredient table */
+.ingredient-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.ingredient-table tr {
+  border-bottom: 1px solid rgba(240, 237, 232, 0.06);
+}
+
+.ingredient-table td {
+  padding: 12px 0;
+  font-size: 13px;
+  vertical-align: top;
+}
+
+.ingredient-table td:first-child {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text);
+  width: 40%;
+  padding-right: 20px;
+}
+
+.ingredient-table td:last-child {
+  color: rgba(240, 237, 232, 0.65);
+  font-weight: 300;
+}
+
+.ingredient-inci {
+  display: block;
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  margin-top: 2px;
+}
+
+/* Usage steps */
+.steps {
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  counter-increment: step;
+  padding: 12px 0 12px 40px;
+  position: relative;
+  border-left: 1px solid rgba(200, 169, 110, 0.2);
+  margin-left: 12px;
+}
+
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: -12px;
+  top: 12px;
+  width: 24px;
+  height: 24px;
+  background: var(--bg);
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+/* Warning box */
+.warning-box {
+  border: 1px solid rgba(200, 169, 110, 0.25);
+  padding: 20px 24px;
+  margin: 20px 0;
+  position: relative;
+}
+
+.warning-box::before {
+  content: 'IMPORTANT';
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  background: var(--bg);
+  padding: 0 8px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.warning-box p, .warning-box li {
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.75);
+}
+
+/* Microneedling table */
+.depth-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.depth-table th {
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(200, 169, 110, 0.2);
+}
+
+.depth-table td {
+  padding: 10px 0;
+  font-size: 13px;
+  color: rgba(240, 237, 232, 0.75);
+  border-bottom: 1px solid rgba(240, 237, 232, 0.04);
+}
+
+.depth-table td:first-child {
+  font-weight: 400;
+  color: var(--text);
+  width: 30%;
+}
+
+/* Footer */
+.footer-meta {
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(240, 237, 232, 0.08);
+  text-align: center;
+}
+
+.footer-meta p {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin: 4px 0;
+  letter-spacing: 0.05em;
+}
+
+.footer-meta .made-in {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+ul.plain {
+  list-style: none;
+  padding: 0;
+}
+
+ul.plain li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+}
+
+ul.plain li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 6px;
+  height: 1px;
+  background: var(--gold);
+}
+
+a { color: var(--gold); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Site Navigation */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 48px;
+  background: rgba(13, 14, 16, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(200, 169, 110, 0.15);
+}
+
+.site-nav-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-nav-brand {
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.site-nav-brand:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.site-nav-link {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-nav-link:hover {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.site-nav-link--active {
+  color: var(--gold);
+}
+
+@media (max-width: 480px) {
+  .product-name { font-size: 32px; }
+  .container { padding: 96px 18px 60px; }
+  .ingredient-table td:first-child { width: 35%; }
+  .site-nav-link { font-size: 10px; letter-spacing: 0.05em; }
+  .site-nav-links { gap: 16px; }
+}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="https://lumina-drt.pages.dev" class="site-nav-brand">LUMINA</a>
+    <div class="site-nav-links">
+      <a href="recovery.html" class="site-nav-link site-nav-link--active">Recovery Serum</a>
+      <a href="../daily-serum/daily.html" class="site-nav-link">Daily Serum</a>
+    </div>
+  </div>
+</nav>
+<div class="page-glow"></div>
+<div class="container">
+
+  <header>
+    <p class="brand">LUMINA</p>
+    <h1 class="product-name">Recovery Serum</h1>
+    <p class="active-highlight">GHK-Cu 0.1%</p>
+    <div class="divider"></div>
+  </header>
+
+  <!-- INGREDIENTS -->
+  <section>
+    <p class="section-subtitle">Full INCI Ingredient List</p>
+    <h2 class="section-title">Ingredients</h2>
+    <table class="ingredient-table">
+      <tr>
+        <td>Aqua<span class="ingredient-inci">Water</span></td>
+        <td>Purified water base; serves as the primary solvent and delivery vehicle for all active and inactive ingredients.</td>
+      </tr>
+      <tr>
+        <td>Centella Asiatica Extract<span class="ingredient-inci">Gotu Kola</span></td>
+        <td>Botanical extract clinically recognized for wound healing support, collagen synthesis stimulation, and anti-inflammatory activity. Helps calm irritated skin post-procedure.</td>
+      </tr>
+      <tr>
+        <td>Glycerin<span class="ingredient-inci">Vegetable Glycerin</span></td>
+        <td>Humectant that draws moisture from the environment into the skin, maintaining hydration and reinforcing the skin barrier.</td>
+      </tr>
+      <tr>
+        <td>Aloe Barbadensis Leaf Juice<span class="ingredient-inci">Aloe Vera</span></td>
+        <td>Soothing botanical juice with anti-inflammatory and hydrating properties. Provides immediate comfort to sensitized skin.</td>
+      </tr>
+      <tr>
+        <td>Phenoxyethanol<span class="ingredient-inci">Preservative</span></td>
+        <td>Broad-spectrum preservative that prevents microbial growth, ensuring product safety and stability throughout shelf life.</td>
+      </tr>
+      <tr>
+        <td>Caprylyl Glycol<span class="ingredient-inci">Conditioning Agent</span></td>
+        <td>Skin-conditioning agent with mild antimicrobial properties. Works synergistically with phenoxyethanol to boost preservation efficacy.</td>
+      </tr>
+      <tr>
+        <td>Sorbic Acid<span class="ingredient-inci">Preservative</span></td>
+        <td>Naturally-derived preservative that inhibits yeast and mold growth, adding a secondary layer of product protection.</td>
+      </tr>
+      <tr>
+        <td>Sodium Hyaluronate<span class="ingredient-inci">Hyaluronic Acid</span></td>
+        <td>Low molecular weight form of hyaluronic acid that penetrates deeper into the skin, binding up to 1,000x its weight in water for deep hydration and plumping.</td>
+      </tr>
+      <tr>
+        <td>Copper Tripeptide-1<span class="ingredient-inci">GHK-Cu</span></td>
+        <td>Bioactive copper peptide at 0.1% concentration. Signals skin repair, stimulates collagen and glycosaminoglycan synthesis, and promotes tissue remodeling. The key active in this formulation.</td>
+      </tr>
+    </table>
+  </section>
+
+  <div class="divider-full"></div>
+
+  <!-- HOW TO USE -->
+  <section>
+    <p class="section-subtitle">Application Protocol</p>
+    <h2 class="section-title">How to Use</h2>
+    <ol class="steps">
+      <li>Cleanse skin thoroughly with a gentle, pH-balanced cleanser. Pat dry.</li>
+      <li>Dispense 2-3 drops of Recovery Serum onto fingertips.</li>
+      <li>Apply to target areas using gentle pressing motions — do not rub or drag across the skin.</li>
+      <li>Allow 1-2 minutes for full absorption before layering additional products.</li>
+      <li>Follow with a moisturizer or occlusive to seal in active ingredients.</li>
+      <li>Use once daily in the evening, or as directed post-procedure.</li>
+    </ol>
+  </section>
+
+  <div class="divider-full"></div>
+
+  <!-- MICRONEEDLING -->
+  <section>
+    <p class="section-subtitle">Advanced Application</p>
+    <h2 class="section-title">Microneedling Compatibility</h2>
+    <p style="margin-bottom: 20px;">This serum is formulated to be compatible with microneedling (collagen induction therapy). GHK-Cu is well-suited for post-microneedling application due to its tissue repair and anti-inflammatory signaling properties.</p>
+
+    <h3 style="font-family: var(--serif); font-size: 18px; margin-bottom: 12px;">Needle Depth Guidelines</h3>
+    <table class="depth-table">
+      <thead>
+        <tr>
+          <th>Depth</th>
+          <th>Target Concern</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>0.25 mm</td>
+          <td>Product absorption enhancement, superficial texture improvement</td>
+        </tr>
+        <tr>
+          <td>0.5 mm</td>
+          <td>Fine lines, mild hyperpigmentation, overall skin rejuvenation</td>
+        </tr>
+        <tr>
+          <td>1.0 mm</td>
+          <td>Moderate scarring, deeper wrinkles, collagen induction</td>
+        </tr>
+        <tr>
+          <td>1.5 mm</td>
+          <td>Acne scars, deep wrinkles, stretch marks (professional setting recommended)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-family: var(--serif); font-size: 18px; margin: 24px 0 12px;">Timing Protocol</h3>
+    <ul class="plain">
+      <li>Apply serum immediately after microneedling while micro-channels are still open (within 5 minutes).</li>
+      <li>For depths over 1.0 mm, wait until pinpoint bleeding has stopped before applying.</li>
+      <li>Do not wash the treated area for at least 4 hours post-application.</li>
+      <li>Reapply serum the following morning and evening for 48-72 hours post-procedure.</li>
+    </ul>
+
+    <h3 style="font-family: var(--serif); font-size: 18px; margin: 24px 0 12px;">Actives to Avoid Combining</h3>
+    <ul class="plain">
+      <li>Retinol / Retinoids — discontinue 3-5 days before microneedling and 3 days after.</li>
+      <li>Vitamin C (L-Ascorbic Acid) — avoid for 24-48 hours post-procedure due to pH sensitivity.</li>
+      <li>AHA/BHA exfoliants — discontinue 48 hours before and after microneedling.</li>
+      <li>Benzoyl Peroxide — avoid for 48 hours post-procedure (can cause excessive drying and irritation).</li>
+    </ul>
+
+    <div class="warning-box">
+      <p>Do not use this product on:</p>
+      <ul class="plain" style="margin-top: 8px;">
+        <li>Broken, sunburned, or compromised skin</li>
+        <li>Active acne lesions or pustules</li>
+        <li>Skin experiencing an active rosacea flare</li>
+        <li>Open wounds or freshly sutured areas</li>
+        <li>Areas with active eczema or dermatitis</li>
+      </ul>
+      <p style="margin-top: 12px;">If irritation, redness, or swelling occurs beyond expected post-procedure response, discontinue use and consult a dermatologist.</p>
+    </div>
+  </section>
+
+  <div class="divider-full"></div>
+
+  <!-- STORAGE -->
+  <section>
+    <p class="section-subtitle">Care &amp; Handling</p>
+    <h2 class="section-title">Storage Instructions</h2>
+    <ul class="plain">
+      <li>Store in a cool, dry place between 15-25 &deg;C (59-77 &deg;F).</li>
+      <li>Keep away from direct sunlight and heat sources — amber glass provides UV protection but is not a substitute for proper storage.</li>
+      <li>Refrigeration is acceptable and may extend potency of the copper peptide complex.</li>
+      <li>Keep bottle tightly sealed when not in use to prevent oxidation.</li>
+      <li>Use within 6 months of opening.</li>
+    </ul>
+  </section>
+
+  <div class="divider-full"></div>
+
+  <!-- ADVERSE EVENT -->
+  <section>
+    <p class="section-subtitle">Safety</p>
+    <h2 class="section-title">Adverse Event Contact</h2>
+    <p>If you experience an unexpected adverse reaction, discontinue use immediately and contact us:</p>
+    <p style="margin-top: 12px;"><a href="mailto:luminaskincare.lab@gmail.com">luminaskincare.lab@gmail.com</a></p>
+    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">For external use only. Discontinue if irritation occurs. Keep out of reach of children. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-meta">
+    <p>5 mL &middot; Batch 001 &middot; Exp 12/2026</p>
+    <p>For external use only</p>
+    <p style="margin-top: 8px;"><a href="mailto:luminaskincare.lab@gmail.com">luminaskincare.lab@gmail.com</a></p>
+    <p class="made-in">Made in Houston, TX by hand in small batches</p>
+  </footer>
+
+</div>
+</body>
+</html>
